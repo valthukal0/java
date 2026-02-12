@@ -1,0 +1,49 @@
+package com.mycompany.synchronizedcounterdemo; 
+ 
+class Counter { 
+    private int count = 0; 
+    // Synchronized method (critical section) 
+    public synchronized void increment() { 
+        count++; 
+        System.out.println( 
+            Thread.currentThread().getName() + 
+            " incremented the count to: " + count 
+        ); 
+    } 
+    // Synchronized getter (good practice) 
+    public synchronized int getCount() { 
+        return count; 
+    } 
+} 
+public class SynchronizedCounterDemo { 
+    public static void main(String[] args) { 
+        Counter counter = new Counter(); 
+        // Runnable task 
+        Runnable task = () -> { 
+            for (int i = 0; i < 5; i++) { 
+                counter.increment(); 
+                try { 
+                    Thread.sleep(500); 
+                } catch (InterruptedException e) { 
+                    System.out.println(e.getMessage()); 
+                }
+                     } 
+        }; 
+        // Creating threads 
+        Thread thread1 = new Thread(task, "Thread1"); 
+        Thread thread2 = new Thread(task, "Thread2"); 
+        // Starting threads 
+        thread1.start(); 
+        thread2.start(); 
+        // Waiting for threads to complete 
+        try { 
+            thread1.join(); 
+            thread2.join(); 
+        } catch (InterruptedException e) { 
+            System.out.println(e.getMessage()); 
+        } 
+        // Final output 
+        System.out.println("Final count: " + counter.getCount()); 
+        System.out.println("Main thread completed"); 
+    } 
+}
