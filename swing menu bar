@@ -1,0 +1,54 @@
+package menubar; 
+import javax.swing.*; 
+public class Menubar { 
+    public static void main(String[] args) { 
+        JFrame frame = new JFrame("Menu Bar Example"); 
+        frame.setSize(400, 300); 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+        // Creating Menu Bar 
+        JMenuBar menuBar = new JMenuBar(); 
+        // File Menu Title 
+        JMenu fileMenu = new JMenu("File"); 
+        // Menu Items 
+        JMenuItem newMenuItem = new JMenuItem("New"); 
+        JMenuItem openMenuItem = new JMenuItem("Open"); 
+        JMenuItem saveMenuItem = new JMenuItem("Save"); 
+        JMenuItem exitMenuItem = new JMenuItem("Exit"); 
+        fileMenu.add(newMenuItem); 
+        fileMenu.add(openMenuItem); 
+        fileMenu.add(saveMenuItem); 
+        fileMenu.addSeparator(); 
+        fileMenu.add(exitMenuItem); 
+        // Edit Menu Title 
+        JMenu editMenu = new JMenu("Edit"); 
+        // Menu Items 
+        JMenuItem cutMenuItem = new JMenuItem("Cut"); 
+        JMenuItem copyMenuItem = new JMenuItem("Copy"); 
+        JMenuItem pasteMenuItem = new JMenuItem("Paste"); 
+        editMenu.add(cutMenuItem); 
+        editMenu.add(copyMenuItem);
+         editMenu.add(pasteMenuItem); 
+ 
+        // Add menu titles to menu bar 
+        menuBar.add(fileMenu); 
+        menuBar.add(editMenu); 
+ 
+        // Message Pop ups 
+        newMenuItem.addActionListener(e -> 
+        JOptionPane.showMessageDialog(frame, "New clicked")); 
+ 
+        openMenuItem.addActionListener(e -> 
+        JOptionPane.showMessageDialog(frame, "Open clicked")); 
+ 
+        saveMenuItem.addActionListener(e -> 
+        JOptionPane.showMessageDialog(frame, "Save clicked")); 
+ 
+        exitMenuItem.addActionListener(e -> { 
+        JOptionPane.showMessageDialog(frame, "Exit clicked"); 
+        System.exit(0); }); 
+ 
+        // Set menu bar to frame 
+        frame.setJMenuBar(menuBar); 
+        frame.setVisible(true); 
+    } 
+}
