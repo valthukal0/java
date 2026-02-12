@@ -1,0 +1,26 @@
+SampleRead.java 
+package sampleread; 
+import java.io.FileInputStream; 
+import java.io.IOException; 
+public class SampleRead { 
+    public static void main(String[] args) { 
+        String filePath = "S:\\java lab/text.txt"; 
+        FileInputStream fis = null; 
+        try{ 
+            fis = new FileInputStream(filePath); 
+            int content; 
+            while((content = fis.read())!=-1){ 
+                System.out.print((char)content); 
+            } 
+            System.out.print("\n"); 
+            fis.close(); 
+        }catch(IOException e){ 
+            System.out.println("An error occured while reading file: "+e.getMessage()); 
+        }finally{ 
+            try{ 
+                if(fis!= null){ 
+                    fis.close(); 
+                } 
+            }catch(IOException e){ 
+                System.out.println("An error occured while closing the file: "+e.getMessage()); 
+            } }  }  } 
