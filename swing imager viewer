@@ -1,0 +1,53 @@
+package imageviewer; 
+import javax.swing.*; 
+import java.awt.*; 
+import java.awt.event.*; 
+import java.io.File; 
+ 
+public class ImageViewer { 
+    public static void main(String[] args) { 
+        JFrame frame = new JFrame("Image Viewer"); 
+        JLabel imageLabel = new JLabel(); 
+        JButton loadButton = new JButton("Load Image"); 
+        JFileChooser fileChooser = new JFileChooser(); 
+        frame.setLayout(new BorderLayout()); 
+        imageLabel.setHorizontalAlignment(JLabel.CENTER); 
+        frame.add(imageLabel, BorderLayout.CENTER); 
+        frame.add(loadButton, BorderLayout.SOUTH); 
+        // Load Image Button Action 
+        loadButton.addActionListener(new ActionListener() { 
+            @Override 
+            public void actionPerformed(ActionEvent e) { 
+                int returnVal = fileChooser.showOpenDialog(frame); 
+                if (returnVal == JFileChooser.APPROVE_OPTION) { 
+                    File file = fileChooser.getSelectedFile(); 
+                    ImageIcon imageIcon = new ImageIcon(file.getPath()); 
+                    Image image = imageIcon.getImage().getScaledInstance( 
+                            frame.getWidth(), 
+                            frame.getHeight(), 
+                            Image.SCALE_SMOOTH 
+                    ); 
+ imageLabel.setIcon(new ImageIcon(image)); 
+                } 
+            } 
+        }); 
+        // Resize image when frame is resized 
+        frame.addComponentListener(new ComponentAdapter() { 
+            @Override 
+            public void componentResized(ComponentEvent e) { 
+                if (imageLabel.getIcon() != null) { 
+                    ImageIcon icon = (ImageIcon) imageLabel.getIcon(); 
+                    Image image = icon.getImage().getScaledInstance( 
+                            frame.getWidth(), 
+                            frame.getHeight(), 
+                            Image.SCALE_SMOOTH 
+                    ); 
+                    imageLabel.setIcon(new ImageIcon(image)); 
+                } 
+            } 
+        }); 
+        frame.setSize(600, 400); 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+        frame.setVisible(true); 
+    } 
+}
