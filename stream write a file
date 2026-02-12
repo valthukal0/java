@@ -1,0 +1,18 @@
+package samplefiles; 
+import java.io.*; 
+public class SampleFiles { 
+    public static void main(String[] args) { 
+        try ( 
+            FileInputStream source = new FileInputStream("S:\\pg.txt"); 
+            FileOutputStream destination = new FileOutputStream("S:\\ug.txt") 
+        ) { 
+            int data; 
+            while ((data = source.read()) != -1) { 
+                destination.write(data); 
+            } 
+            System.out.println("File successfully copied from source file to destination file"); 
+        } catch (IOException e) { 
+            System.out.println("Error: " + e.getMessage()); 
+        } 
+    } 
+} 
