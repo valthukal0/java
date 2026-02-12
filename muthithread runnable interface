@@ -1,0 +1,54 @@
+package com.mycompany.multithreadrunnabledemo; 
+public class MultiThreadRunnableDemo { 
+    public static void main(String[] args) { 
+        Runnable task1 = ()->{ 
+            for(int i = 1; i<=5; i++){ 
+                System.out.println(i); 
+                try{ 
+                    Thread.sleep(500); 
+                } 
+                catch(InterruptedException e){ 
+                    System.out.println(e.getMessage()); 
+                } 
+            } 
+        }; 
+         
+        Runnable task2 = ()->{ 
+            for(int i = 6; i<=10; i++){ 
+                System.out.println(i); 
+                try{ 
+                    Thread.sleep(1000); 
+                } 
+                catch(InterruptedException e){ 
+                    System.out.println(e.getMessage()); 
+                } 
+            } 
+        }; 
+         
+        Runnable task3 = ()->{ 
+            for(int i = 11; i<=15; i++){
+             System.out.println(i); 
+                try{ 
+                    Thread.sleep(2000); 
+                } 
+                catch(InterruptedException e){ 
+                    System.out.println(e.getMessage()); 
+                } 
+            } 
+        }; 
+        Thread childThread1 = new Thread(task1, "childThread1"); 
+        Thread childThread2 = new Thread(task2, "childThread2"); 
+        Thread childThread3 = new Thread(task3, "childThread3"); 
+         
+        childThread1.start(); 
+        childThread2.start(); 
+        childThread3.start(); 
+        try{ 
+            childThread1.join(); 
+            childThread2.join(); 
+            childThread3.join(); 
+        } 
+        catch(InterruptedException e){ 
+            System.out.println(e.getMessage()); 
+            } 
+    }} 
