@@ -1,0 +1,24 @@
+package lambda; 
+public class Lambda { 
+    public static void main(String[] args) { 
+        MathOperation add = (a,b)-> a+b; 
+        System.out.println("Addition: " + performOperation(add,5,3)); 
+         
+        MathOperation subtract = (a,b) -> a-b; 
+        System.out.println("Subtraction: " + performOperation(subtract,5,3)); 
+         
+        MathOperation multiply = (a,b) -> a-b; 
+        System.out.println("Multiplication: " + performOperation(multiply,5,3)); 
+         
+        MathOperation divide = (a,b)-> { 
+            if(b==0){ 
+                System.out.println("Cannot divide by 0"); 
+                return 0; 
+            } 
+            return a/b; 
+        }; 
+        System.out.println("Division: " + performOperation(divide,5,0));
+ } 
+    public static int performOperation(MathOperation operation, int a, int b){ 
+        return operation.operate(a, b); 
+    }}
