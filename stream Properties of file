@@ -1,0 +1,19 @@
+FileProperties.java 
+package fileproperties; 
+import java.io.File; 
+public class FileProperties { 
+    public static void main(String[] args) { 
+        String filePath = "S:\\file.txt"; 
+        File file = new File(filePath); 
+        if(file.exists()){ 
+            System.out.println("File Name: "+file.getName()); 
+            System.out.println("FilePath: "+file.getAbsolutePath()); 
+            System.out.println("File Size: "+ file.length()+"bytes"); 
+            System.out.println("Is Readable: "+file.canRead()); 
+            System.out.println("Is Writable: "+file.canWrite()); 
+            System.out.println("Is Hidden: "+file.isHidden()); 
+            System.out.println("Last Modified: "+file.lastModified()); 
+            System.out.println("Is Readable: "+file.canRead()); 
+        } 
+    } 
+}
