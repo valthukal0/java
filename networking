@@ -1,0 +1,78 @@
+Chat Application using TCP Protocol 
+//Server Code 
+//SimpleChatServer.java 
+package simplechatserver; 
+import java.io.BufferedReader; 
+import java.io.IOException; 
+import java.io.InputStreamReader; 
+import java.io.PrintWriter; 
+import java.net.ServerSocket; 
+import java.net.Socket; 
+ 
+public class SimpleChatServer { 
+ 
+    public static void main(String[] args) throws IOException { 
+        final int PORT = 123; 
+        try (ServerSocket serversocket = new ServerSocket(PORT)) { 
+            System.out.println("Server started. Waiting for a client..."); 
+            Socket clientSocket = serversocket.accept(); 
+            System.out.println("Client Connected..."); 
+            BufferedReader in = new BufferedReader(new 
+InputStreamReader(clientSocket.getInputStream())); 
+ 
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true); 
+            String message; 
+            while ((message = in.readLine()) != null) { 
+                System.out.println("Client: " + message); 
+                String response = message.toUpperCase(); 
+                out.println(response); 
+                System.out.println("Server: " + response);
+ } 
+ 
+        } catch (IOException e) { 
+            e.printStackTrace(); 
+        } 
+    } 
+} 
+ 
+//Client Code 
+//SimpleChatClient.java 
+package chatClient; 
+import java.io.*; 
+import java.net.Socket; 
+public class SimpleChatClient { 
+ 
+    private static final String HOST = "127.0.0.1"; 
+    private static final int PORT = 123; 
+ 
+    public static void main(String[] args) { 
+        try ( 
+                Socket socket = new Socket(HOST, PORT); 
+                BufferedReader in = new BufferedReader( 
+                        new InputStreamReader(socket.getInputStream())); 
+                PrintWriter out = new PrintWriter( 
+                        socket.getOutputStream(), true); 
+                BufferedReader consoleInput = new BufferedReader( 
+                        new InputStreamReader(System.in))) { 
+ 
+            System.out.println("Connected to the server. Type your message:"); 
+ // Thread to read messages from server 
+            new Thread(() -> { 
+                try { 
+                    String serverMessage; 
+                    while ((serverMessage = in.readLine()) != null) { 
+                        System.out.println("Server: " + serverMessage); 
+                    } 
+                } catch (IOException e) { 
+                    System.out.println("Connection closed."); 
+                } 
+            }).start(); 
+            String userInput; 
+            while ((userInput = consoleInput.readLine()) != null) { 
+                out.println(userInput);   // SEND to server 
+            } 
+        } catch (IOException e) { 
+            e.printStackTrace(); 
+        } 
+    } 
+} 
