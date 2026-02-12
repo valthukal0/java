@@ -1,0 +1,26 @@
+package wordcount; 
+import javax.swing.*; 
+public class WordCounter { 
+    public static void main(String[] args) { 
+        JFrame frame = new JFrame("Word and Character Count"); 
+        JTextArea textArea = new JTextArea(10, 30); 
+        JLabel wordCount = new JLabel("Words: 0"); 
+        JLabel charCount = new JLabel("Characters: 0"); 
+        JButton countButton = new JButton("Count"); 
+ 
+        countButton.addActionListener(e -> { 
+            String text = textArea.getText().trim(); 
+            wordCount.setText("Words: " + (text.isEmpty() ? 0 : text.split("\\s+").length)); 
+            charCount.setText("Characters: " + text.length()); 
+        }); 
+        JPanel panel = new JPanel(); 
+        panel.add(new JScrollPane(textArea)); 
+        panel.add(countButton); 
+        panel.add(wordCount); 
+        panel.add(charCount); 
+ 
+        frame.add(panel); 
+        frame.pack(); 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+        frame.setVisible(true); 
+    }} 
