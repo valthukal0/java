@@ -1,0 +1,25 @@
+Array,java 
+package com.mycompany.array; 
+import java.util.ArrayList; 
+import java.util.LinkedList; 
+public class Array { 
+    public static void main(String[] args) { 
+        //Array 
+        ArrayList<String> array = new ArrayList<>(); 
+        array.add("Apple"); 
+        array.add("Banana"); 
+        array.add("Grapoes"); 
+        System.out.println("Array List elements:"); 
+        for(String item:array){ 
+            System.out.println(item); 
+        } 
+        //LinkedList 
+        LinkedList<String> linked = new LinkedList<>(); 
+        linked.add("Dog"); 
+        linked.add("Elephant"); 
+        linked.add("Fox"); 
+        System.out.println("\nLinkedList element: "); 
+        for(String item: linked){ 
+            System.out.println(item); 
+        } 
+    }} 
