@@ -1,0 +1,60 @@
+AddServer.java 
+import java.rmi.Naming; 
+import java.rmi.registry.LocateRegistry; 
+ 
+ 
+public class AddServer { 
+public static void main(String[] args) { 
+try { 
+// Start RMI registry on port 1099 
+LocateRegistry.createRegistry(1099); 
+ 
+AddInterface addObj = new AddImplementation(); 
+ 
+ 
+// Bind the object 
+Naming.rebind("rmi://localhost/AddService", addObj); 
+ 
+System.out.println("Add Server is ready..."); 
+} catch (Exception e) { 
+e.printStackTrace(); 
+} 
+} 
+} 
+AddClient.java: 
+import java.rmi.Naming; 
+ 
+public class AddClient { 
+public static void main(String[] args) { 
+try { 
+AddInterface addObj = 
+(AddInterface) Naming.lookup("rmi://localhost/AddService"); 
+ 
+ 
+int result = addObj.add(10, 20); 
+System.out.println("Result from server: " + result); 
+} catch (Exception e) { 
+e.printStackTrace(); 
+} 
+} 
+} 
+ 
+ 
+AddImplementation.java: 
+import java.rmi.RemoteException; 
+import java.rmi.server.UnicastRemoteObject; 
+public class AddImplementation extends UnicastRemoteObject implements AddInterface { 
+protected AddImplementation() throws RemoteException { 
+super(); 
+} 
+@Override 
+public int add(int a, int b) throws RemoteException { 
+return a + b; 
+} 
+} 
+AddInterface.java: 
+import java.rmi.Remote; 
+import java.rmi.RemoteException;
+public interface AddInterface extends Remote { 
+int add(int a, int b) throws RemoteException; 
+} 
