@@ -1,0 +1,120 @@
+package com.example.cassandraanalyticsapp; 
+import com.datastax.oss.driver.api.core.CqlSession; 
+import com.datastax.oss.driver.api.core.cql.*; 
+import java.net.InetSocketAddress; 
+import java.util.HashMap; 
+import java.util.Map; 
+public class CassandraAnalyticsApp { 
+ 
+ 
+public static void main(String[] args) { 
+ 
+ 
+try (CqlSession session = CqlSession.builder() 
+.addContactPoint(new InetSocketAddress("127.0.0.1", 9042)) 
+.withLocalDatacenter("datacenter1") 
+.build()) { 
+ 
+ 
+System.out.println("Connected to Cassandra\n"); 
+session.execute( 
+"CREATE KEYSPACE IF NOT EXISTS company " + 
+"WITH replication = {'class':'SimpleStrategy','replication_factor':1};" 
+); 
+ 
+ 
+session.execute( 
+"CREATE TABLE IF NOT EXISTS company.employee (" + 
+"id INT PRIMARY KEY," + 
+"name TEXT," + 
+"department TEXT," +"salary DOUBLE" 
+");" 
+);
+System.out.println("Keyspace and Table ready!\n"); 
+ResultSet check = session.execute("SELECT COUNT(*) FROM 
+company.employee"); 
+long count = check.one().getLong(0); 
+ 
+ 
+if (count == 0) { 
+System.out.println("Inserting sample data...\n"); 
+session.execute("INSERT INTO company.employee (id,name,department,salary) 
+VALUES (1,'Aisha','IT',50000)"); 
+session.execute("INSERT INTO company.employee (id,name,department,salary) 
+VALUES (2,'Rahul','HR',40000)"); 
+session.execute("INSERT INTO company.employee (id,name,department,salary) 
+VALUES (3,'John','IT',60000)"); 
+session.execute("INSERT INTO company.employee (id,name,department,salary) 
+VALUES (4,'Sara','Finance',55000)"); 
+session.execute("INSERT INTO company.employee (id,name,department,salary) 
+VALUES (5,'David','HR',45000)"); 
+session.execute("INSERT INTO company.employee (id,name,department,salary) 
+VALUES (6,'Meena','IT',52000)"); 
+session.execute("INSERT INTO company.employee (id,name,department,salary) 
+VALUES (7,'Arun','Finance',58000)"); 
+} 
+ResultSet stats = session.execute( 
+"SELECT COUNT(*), AVG(salary), MAX(salary), MIN(salary) FROM 
+company.employee"); 
+Row row = stats.one(); 
+System.out.println("=== Statistics ==="); 
+System.out.println("Total Employees : " + row.getLong(0)); 
+System.out.println("Average Salary : " + row.getDouble(1)); 
+System.out.println("Maximum Salary : " + row.getDouble(2)); 
+System.out.println("Minimum Salary : " + row.getDouble(3)); 
+System.out.println("\n=== Employee Report ==="); 
+ResultSet report = session.execute("SELECT * FROM company.employee"); 
+for (Row r : report) {
+System.out.println("ID: " + r.getInt("id") 
++ " | Name: " + r.getString("name") 
++ " | Dept: " + r.getString("department") 
++ " | Salary: " + r.getDouble("salary")); 
+} 
+System.out.println("\n=== Department Insights ==="); 
+ResultSet insight = session.execute("SELECT department, salary FROM 
+company.employee"); 
+Map<String, Integer> deptCount = new HashMap<>(); 
+Map<String, Double> deptTotalSalary = new HashMap<>(); 
+for (Row r : insight) { 
+String dept = r.getString("department"); 
+double salary = r.getDouble("salary"); 
+deptCount.put(dept, deptCount.getOrDefault(dept, 0) + 1); 
+deptTotalSalary.put(dept, deptTotalSalary.getOrDefault(dept, 0.0) + salary); 
+} 
+for (String dept : deptCount.keySet()) { 
+int empCount = deptCount.get(dept); 
+double avgSalary = deptTotalSalary.get(dept) / empCount; 
+System.out.println("Department: " + dept 
++ " | Employees: " + empCount 
++ " | Avg Salary: " + avgSalary); 
+} 
+ 
+ 
+} catch (Exception e) { 
+e.printStackTrace(); 
+} 
+} 
+} 
+Pom.xml 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
+<modelVersion>4.0.0</modelVersion> 
+<groupId>com.example</groupId> 
+<artifactId>CassandraAnalyticsApp</artifactId> 
+<version>1.0-SNAPSHOT</version> 
+<packaging>jar</packaging> 
+<properties> 
+<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
+<maven.compiler.source>1.8</maven.compiler.source> 
+<maven.compiler.target>1.8</maven.compiler.target> 
+</properties> 
+<dependencies> 
+<dependency> 
+<groupId>com.datastax.oss</groupId> 
+<artifactId>java-driver-core</artifactId> 
+<version>4.17.0</version> 
+</dependency> 
+</dependencies> 
+</project>
